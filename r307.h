@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 /**
- * @brief INITIALIZE UART FRO R307 FINGERPRINT MODULE
+ * @brief INITIALIZE UART FOR R307 FINGERPRINT MODULE
  *
  * @return
  */
