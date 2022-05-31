@@ -42,10 +42,10 @@ uint8_t r307_reponse(char instruction_code[])
     {
         received_package[rxBytes] = 0;
         // ESP_LOGI("R307_RX", "Read %d bytes: '%s'", rxBytes, received_package);
-        ESP_LOG_BUFFER_HEXDUMP("R307_RX", received_package, rxBytes, ESP_LOG_INFO);
+        ESP_LOG_BUFFER_HEXDUMP("R307_RX", received_package, rxBytes, ESP_LOG_INFO);     //++ Dumps the response in HEX format
 
-        r307_response_parser(instruction_code, received_package);
-        received_confirmation_code = received_package[9];
+        r307_response_parser(instruction_code, received_package);                       //++ Pass the received response to the parser function
+        received_confirmation_code = received_package[9];                               //++ Get the Confirmation Code from received from the response
     }
     free(received_package);
 
@@ -55,7 +55,7 @@ uint8_t r307_reponse(char instruction_code[])
 uint16_t check_sum(char tx_cmd_data[], char r307_data[])
 {
     uint16_t result = 0;
-    if(r307_data[0] == '#')
+    if(r307_data[0] == '#')                                                             //++ Check whether to perform checksum for packet without extra data inputs
     {
         char length[4];
         sprintf(length,"%c%c",r307_data[1],r307_data[2]);
@@ -65,7 +65,7 @@ uint16_t check_sum(char tx_cmd_data[], char r307_data[])
             result = result + tx_cmd_data[i+6];
         }
     }
-    else
+    else                                                                                //++ Check whether to perform checksum for packet with extra data inputs
     {
         for(int i=0; i<4; i++)
         {
@@ -91,15 +91,15 @@ uint8_t VfyPwd(char r307_address[], char vfy_password[])
     char check_sum_data[2] = {0x00, 0x1B};
     uint8_t confirmation_code = 0;
 
-    uint16_t checksum_value = check_sum(tx_cmd_data, vfy_password);
-    check_sum_data[0] = (checksum_value >> 8) & (0xFF);
-    check_sum_data[1] = checksum_value & (0xFF);
+    uint16_t checksum_value = check_sum(tx_cmd_data, vfy_password);                     //++ Get the checksum result
+    check_sum_data[0] = (checksum_value >> 8) & (0xFF);                                 //++ Split checksum in Higher bits
+    check_sum_data[1] = checksum_value & (0xFF);                                        //++ Split checksum in Lower bits
 
-    for(int i=0; i<4; i++)
+    for(int i=0; i<4; i++)                                                              //++ Loop to add module address and password 
     {
         tx_cmd_data[i+2] = r307_address[i];
         tx_cmd_data[i+10] = vfy_password[i];
-        if(i<2)
+        if(i<2)                                                                         //++ Loop to add checksum 
         {
             tx_cmd_data[i+14] = check_sum_data[i];
         }
@@ -107,10 +107,10 @@ uint8_t VfyPwd(char r307_address[], char vfy_password[])
 
     char instruction_code;
 
-    instruction_code = tx_cmd_data[9];
+    instruction_code = tx_cmd_data[9];                                                  //++ Get the Instruction Code
 
     const int package_length = sizeof(tx_cmd_data);
-    const int txBytes = uart_write_bytes(UART_NUM_1, tx_cmd_data, package_length);
+    const int txBytes = uart_write_bytes(UART_NUM_1, tx_cmd_data, package_length);      //++ Send entire packet over UART
 
     ESP_LOGI(R307_TX, "Wrote %d bytes", txBytes);
     vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -860,7 +860,7 @@ uint8_t GetRandomCode(char r307_address[])
 
 void r307_response_parser(char instruction_code[], uint8_t received_package[])
 {
-    uint8_t confirmation_code = received_package[9];
+    uint8_t confirmation_code = received_package[9];                                    //++ Get Confirmation Code from received response packet 
 
     if(instruction_code == 0x13)
     {
