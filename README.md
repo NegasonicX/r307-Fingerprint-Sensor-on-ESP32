@@ -38,3 +38,6 @@ The Following Code is a Library for interfacing r307 Fingerprint Module with ESP
 * There are two functions missing : "WriteNotepad" & "ReadNotepad". I tried but couldn't crack them, so will commit the same whenever possible in future.
 * Do share with others and I hope you all like it :-D
 
+# Reference Material:
+* https://www.openhacks.com/uploadsproductos/r307_fingerprint_module_user_manual.pdf
+
