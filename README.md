@@ -15,7 +15,7 @@ The Following Code is a Library for interfacing r307 Fingerprint Module with ESP
 ![ESP32_R307_Connection](https://user-images.githubusercontent.com/99990377/171999044-11c50e19-c3a8-41ce-922c-179af355bffc.png)
 
 # Understanding the Flow:
-* This code is developed for ESP32 on Embedded C Language using FreeRTOS.
+* This code is developed for ESP32 on Embedded C Language.
 * There are 2 files you need to import which are going to be the library for interfacing ESP32 with R307 Sensor Module.
 * R307 Fingerprint Sensor by default runs on UART Baud : **57600, with 8 data bits, 1 stop bit and no partiy.**
 * Once **"r307_init()"** is called, that shall initialize UART ESP32 with the set parameters.
